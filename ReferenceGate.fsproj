@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Version>1.0.0</Version>
+    <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
+    <!-- Suppresses the warnings about the package not having assemblies in lib/*/.dll.-->
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <!-- Change the default location where NuGet will put the build output -->
+    <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
+    <!-- Copy all files to output so we can grab FSharp.Core.dll -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>Espen Røvik Larsen</Authors>
+    <Description>Strict control over which references are allowed (assembly / package / project).</Description>
+    <PackageId>refGate</PackageId>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/espenrl/ReferenceGate</PackageProjectUrl>
+    <PackageTags>ReferenceGate,MSBuild,CommonProjectSystem,CPS</PackageTags>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/espenrl/ReferenceGate.git</RepositoryUrl>
+    <Title>Reference Gate</Title>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="ReferenceGateTask.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="refGate.props" PackagePath="build\" />
+    <Content Include="refGate.targets" PackagePath="build\" />
+    <Content Include="LICENSE" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <!-- ensure dependencies is included in package after build -->
+  <Target Name="AddFSharpCoreDllToPackage" AfterTargets="Build">
+    <ItemGroup>
+      <Content Include="bin\$(Configuration)\netstandard2.0\FSharp.Core.dll">
+        <PackagePath>tasks\netstandard2.0\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Include="bin\$(Configuration)\net46\FSharp.Core.dll">
+        <PackagePath>tasks\net46\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+    </ItemGroup>
+  </Target>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Framework" Version="15.8.166" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.8.166" />
+    <!-- marks all packages as 'local only' so they don't end up in the nuspec -->
+    <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>

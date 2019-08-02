@@ -1,0 +1,28 @@
+<Project>
+
+  <Target Name="RunReferenceGateTask" BeforeTargets="Build">
+
+    <ReferenceGateTask
+      Type="Assembly"
+      ActualReferences="@(Reference)"
+      ReferenceWhitelist="@(AssemblyReferenceWhitelist)"
+      ReferenceBlacklist="@(AssemblyReferenceBlacklist)"
+      />
+
+    <ReferenceGateTask
+      Type="Package"
+      ActualReferences="@(PackageReference)"
+      ReferenceWhitelist="@(PackageReferenceWhitelist)"
+      ReferenceBlacklist="@(PackageReferenceBlacklist)"
+      />
+
+    <ReferenceGateTask
+      Type="Project"
+      ActualReferences="@(ProjectReference)"
+      ReferenceWhitelist="@(ProjectReferenceWhitelist)"
+      ReferenceBlacklist="@(ProjectReferenceBlacklist)"
+      />
+
+  </Target>
+
+</Project>

@@ -1,0 +1,11 @@
+<Project TreatAsLocalProperty="TaskFolder;TaskAssembly">
+
+  <PropertyGroup>
+    <TaskFolder Condition=" '$(MSBuildRuntimeType)' == 'Core' ">netstandard2.0</TaskFolder>
+    <TaskFolder Condition=" '$(MSBuildRuntimeType)' != 'Core' ">net46</TaskFolder>
+    <TaskAssembly>$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\ReferenceGate.dll</TaskAssembly>
+  </PropertyGroup>
+
+  <UsingTask TaskName="ReferenceGate.ReferenceGateTask" AssemblyFile="$(TaskAssembly)" />
+
+</Project>
